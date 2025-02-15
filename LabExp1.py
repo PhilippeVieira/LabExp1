@@ -1,10 +1,9 @@
+import csv
 import requests
-import json
-import os
 from datetime import datetime
 
 # Carregar o token de acesso do GitHub a partir de variáveis de ambiente
-GITHUB_TOKEN = "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" # TOKEN de acesso (valido por 60 dias)
+GITHUB_TOKEN = "" # TOKEN de acesso
 GITHUB_API_URL = "https://api.github.com/graphql"
 
 # Query GraphQL para obter os repositórios mais populares
@@ -99,6 +98,23 @@ if __name__ == "__main__":
     edges = fetch_github_data()
     if edges:
         repos = process_data(edges)
-        with open("github_repos_data.json", "w") as f:
-            json.dump(repos, f, indent=4)
-        print("Dados salvos em github_repos_data.json")
+        
+        # Criar e escrever no arquivo CSV
+        with open("github_repos_data.csv", "w", newline="", encoding="utf-8") as f:
+            writer = csv.writer(f)
+            
+            # Escrever o cabeçalho do CSV
+            writer.writerow(["Nome", "Dono", "Idade (anos)", "Dias desde última atualização",
+                             "Linguagem", "Releases", "Pull Requests", "Issues Fechadas",
+                             "Total Issues", "Taxa de Fechamento de Issues", "Stars"])
+            
+            # Escrever os dados de cada repositório
+            for repo in repos:
+                writer.writerow([
+                    repo["name"], repo["owner"], repo["age_years"],
+                    repo["time_since_last_update"], repo["language"],
+                    repo["releases"], repo["pull_requests"], repo["closed_issues"],
+                    repo["total_issues"], repo["issue_closure_rate"], repo["stars"],
+                ])
+
+        print("Dados salvos em github_repos_data.csv")
