@@ -7,4 +7,4 @@ O objetivo desse projeto é desenvolver um programa capaz de coletar dados dos 1
 ## Integrantes
 * Gabriel Alejandro Figueiro Galindo
 * Marcelo Aguilar Araújo D'Almeida
-* Philippe Vieira
+* Philippe Roberto Dutra Chaves Vieira
