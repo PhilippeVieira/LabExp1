@@ -1,6 +1,7 @@
 import csv
 import requests
 from datetime import datetime
+import matplotlib.pyplot as plt
 
 # Carregar o token de acesso do GitHub a partir de variáveis de ambiente
 GITHUB_TOKEN = "" # TOKEN de acesso
@@ -94,6 +95,29 @@ def process_data(edges):
         })
     return repos
 
+def show_graphics():
+  dados = open("github_repos_data.csv").readlines()
+  languages = {}
+
+  for i in range(len(dados)): 
+    if i != 0:
+      linha = dados[i].split(",")
+      language = linha[4]
+
+      if language in languages:
+        languages[language] +=1
+      else:
+        languages[language] = 1
+
+  plt.figure(figsize=(14,5))
+  plt.bar(languages.keys(), languages.values())
+  plt.xticks(fontsize=5, rotation=30, ha="right")
+  plt.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.3) 
+  plt.title("Linguagens dos 1000 repositórios mais populares do Github")
+  plt.xlabel("Linguagem")
+  plt.ylabel("Quantidade de repositórios")
+  plt.show()
+
 if __name__ == "__main__":
     edges = fetch_github_data()
     if edges:
@@ -116,5 +140,8 @@ if __name__ == "__main__":
                     repo["releases"], repo["pull_requests"], repo["closed_issues"],
                     repo["total_issues"], repo["issue_closure_rate"], repo["stars"],
                 ])
-
+        
+        
         print("Dados salvos em github_repos_data.csv")
+        show_graphics()
+        
